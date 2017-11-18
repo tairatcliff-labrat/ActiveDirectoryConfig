@@ -27,7 +27,7 @@ ForEach ($Param in $ADConfig){
     if ($Param.DNSZones -eq "n/a"){Continue}
 	if ($Param.DNSZones){
         Try {Add-DnsServerPrimaryZone -NetworkId $Param.DNSZones -ReplicationScope Forest -DynamicUpdate NonsecureAndSecure -ErrorAction Stop}
-	    Catch [System.Exception] {Write-Host "Failed to create DNZ Reverse Lookup Zone" $Param.DNSZones". It may already exist" -ForegroundColor Yellow -BackgroundColor Red}
+	    Catch [System.Exception] {Write-Host "Failed to create DNS Reverse Lookup Zone" $Param.DNSZones". It may already exist" -ForegroundColor Yellow -BackgroundColor Red}
         If ($Error.Count -eq 0){Write-Host "Successfully created Reverse Lookup Zone for" $Param.DNSZones}
         $error.Clear()
     }
@@ -40,7 +40,7 @@ ForEach ($Param in $ADConfig){
     if ($Param.DNSName -eq "n/a"){Continue}
 	if ($Param.DNSName){
         Try {Add-DnsServerResourceRecordA -Name $Param.DNSName -ZoneName $DNSRoot -AllowUpdateAny -IPv4Address $Param.IPAddress -CreatePtr -ErrorAction Stop}
-        Catch [System.Exception] {Write-Host "Failed to create DNZ A record for" $Param.DNSName ". It may already exist" -ForegroundColor Yellow -BackgroundColor Red}
+        Catch [System.Exception] {Write-Host "Failed to create DNS A record for" $Param.DNSName ". It may already exist" -ForegroundColor Yellow -BackgroundColor Red}
         If ($Error.Count -eq 0){Write-Host "Successfully created A record for" $Param.DNSName}
         $error.Clear()
 	}
