@@ -46,15 +46,15 @@ ForEach ($Param in $ADConfig){
 	}
 }
 
-## Create Global Security Groups
+## Create Universal Security Groups
 Write-Host
-Write-Host "Now creating Global Security Groups" -foregroundcolor "yellow"
+Write-Host "Now creating Universal Security Groups" -foregroundcolor "yellow"
 ForEach ($Param in $ADConfig){
 	if ($Param.SecurityGroupToCreate -eq "n/a"){Continue}
     if ($Param.SecurityGroupToCreate){
-		Try {New-ADGroup -Name $Param.SecurityGroupToCreate -GroupCategory Security -GroupScope Global -path $GroupDN -ErrorAction Stop}
+		Try {New-ADGroup -Name $Param.SecurityGroupToCreate -GroupCategory Security -GroupScope Universal -path $GroupDN -ErrorAction Stop}
         Catch [System.Exception] {Write-Host "Failed to create Security Group" $Param.SecurityGroupToCreate ". It may already exist" -ForegroundColor Yellow -BackgroundColor Red}
-        If ($Error.Count -eq 0){Write-Host "Successfully created Global Security Group for" $Param.SecurityGroupToCreate}
+        If ($Error.Count -eq 0){Write-Host "Successfully created Universal Security Group for" $Param.SecurityGroupToCreate}
         $error.Clear()
 	}
 }
@@ -77,13 +77,13 @@ ForEach ($Param in $ADConfig){
 
 ## Add the Service Accounts as members of the required Security Groups
 Write-Host
-Write-Host "Attempting to add Service Accounts to the required Global Security Groups" -foregroundcolor "yellow"
+Write-Host "Attempting to add Service Accounts to the required Universal Security Groups" -foregroundcolor "yellow"
 ForEach ($Param in $ADConfig){
 	if ($Param.SecurityGroupName -eq "n/a"){Continue}
     if ($Param.SecurityGroupName){
         Try {Add-ADGroupMember -Identity $Param.SecurityGroupName -Members $Param.MembersOfSecurityGroup -ErrorAction Stop}
 	    Catch {Write-Host "Failed to add User Account" $Param.MembersOfSecurityGroup "to Security Group" $Param.SecurityGroupName -ForegroundColor Yellow -BackgroundColor Red}
-        If ($Error.Count -eq 0){Write-Host "Successfully added" $Param.MembersOfSecurityGroup "to Global Group" $Param.SecurityGroupName}
+        If ($Error.Count -eq 0){Write-Host "Successfully added" $Param.MembersOfSecurityGroup "to Universal Security Group" $Param.SecurityGroupName}
         $error.Clear()
     }
 }
